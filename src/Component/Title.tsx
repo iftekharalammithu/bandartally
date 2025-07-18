@@ -4,13 +4,14 @@ import { CiEdit } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toTitleCase } from "@/lib/utils";
-import EditableField from "@/components/EditableField";
 
 const Title = () => {
+  // Title
   const [title, settitle] = useState("ABC SHIPPING LINES LTD");
   const [isopenTitle, setisopenTitle] = useState(false);
   const [inputValueTitle, setInputValueTitle] = useState(title);
 
+  // Address
   const [address, setaddress] = useState(
     "185/188 Hakim mini super market 4th Floor, Stand Road Fakirhat Bandar,Chittagong"
   );
@@ -31,8 +32,17 @@ const Title = () => {
   };
 
   return (
-    <div className="text-center items-center flex flex-col">
-      <div className="w-11/12">
+    <div className="text-center  items-center flex flex-col">
+      <style>
+        {`
+        @media print {
+          .print-hide {
+            display: none !important;
+          }
+        }
+      `}
+      </style>
+      <div className="w-11/12 ">
         {isopenTitle ? (
           <form
             onSubmit={handleTitleSubmit}
@@ -45,7 +55,7 @@ const Title = () => {
               value={inputValueTitle}
               onChange={(e) => setInputValueTitle(e.target.value)}
             />
-            <Button variant="outline" type="submit" className="w-fit">
+            <Button variant="destructive" type="submit" className="w-fit">
               Submit
             </Button>
           </form>
@@ -53,6 +63,7 @@ const Title = () => {
           <div className="flex justify-center gap-2">
             <h1 className=" text-2xl font-semibold">{title}</h1>
             <CiEdit
+              className="print-hide"
               onClick={() => {
                 setisopenTitle(true);
                 setInputValueTitle(title);
@@ -61,28 +72,28 @@ const Title = () => {
           </div>
         )}
       </div>
-      <div className="w-11/12 mt-2">
+      <div className="w-fit mt-2">
         {isopenAddress ? (
           <form
             onSubmit={handleAddressSubmit}
-            className="justify-center items-center flex flex-col gap-2"
+            className="justify-center min-w-2xl items-center flex flex-col gap-2"
           >
             <Input
               type="text"
               placeholder="COMPANY ADDRESS"
-              className="mx-1  "
+              className="mx-1 "
               value={inputValueAddress}
               onChange={(e) => setInputValueAddress(e.target.value)}
             />
-            <Button variant="outline" type="submit" className="w-fit">
+            <Button variant="destructive" type="submit" className="w-fit">
               Submit
             </Button>
           </form>
         ) : (
-          <div className="flex justify-center ">
-            <p className=" ">Address:- {address}</p>
+          <div className="flex   justify-center gap-2  ">
+            <p className="">Address:- {address}</p>
             <CiEdit
-              className=" w-8 h-8"
+              className="w-4 h-4 print-hide"
               onClick={() => {
                 setisopenAddress(true);
                 setInputValueAddress(address);
