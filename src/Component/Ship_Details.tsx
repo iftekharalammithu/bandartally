@@ -2,7 +2,7 @@ import React from "react";
 
 const Ship_Details = () => {
   return (
-    <div className=" relative flex mt-2 text-left  w-full">
+    <div className=" relative flex mt-2  w-full">
       <table className="">
         <tbody>
           <tr>

@@ -4,6 +4,7 @@ import { CiEdit } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toTitleCase } from "@/lib/utils";
+import EditableField from "@/components/EditableField";
 
 const Title = () => {
   const [title, settitle] = useState("ABC SHIPPING LINES LTD");
@@ -50,7 +51,7 @@ const Title = () => {
           </form>
         ) : (
           <div className="flex justify-center gap-2">
-            <h1 className="font-lora text-2xl font-semibold">{title}</h1>
+            <h1 className=" text-2xl font-semibold">{title}</h1>
             <CiEdit
               onClick={() => {
                 setisopenTitle(true);
@@ -79,8 +80,9 @@ const Title = () => {
           </form>
         ) : (
           <div className="flex justify-center ">
-            <p className="font-lora ">Address:- {address}</p>
+            <p className=" ">Address:- {address}</p>
             <CiEdit
+              className=" w-8 h-8"
               onClick={() => {
                 setisopenAddress(true);
                 setInputValueAddress(address);
@@ -89,9 +91,7 @@ const Title = () => {
           </div>
         )}
       </div>
-      <h2 className="font-lora font-bold underline mt-2">
-        DAILY DISCHARGING REPORT
-      </h2>
+      <h2 className=" font-bold underline mt-2">DAILY DISCHARGING REPORT</h2>
     </div>
   );
 };
