@@ -102,7 +102,9 @@ const Title = () => {
           </div>
         )}
       </div>
-      <h2 className=" font-bold underline mt-2">DAILY DISCHARGING REPORT</h2>
+      <h2 className=" font-bold underline underline-offset-4 mt-2">
+        DAILY DISCHARGING REPORT
+      </h2>
     </div>
   );
 };
