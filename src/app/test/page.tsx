@@ -1,8 +1,11 @@
 "use client";
+import DoubleShift from "@/Component/Double Shift/DoubleShift";
 import Ship_Details from "@/Component/Ship_Details";
 import Tally_Table from "@/Component/Tally_Table";
 import Title from "@/Component/Title";
-import React, { useRef } from "react";
+import TripleShift from "@/Component/Triple Shift/TripleShift";
+import { cn } from "@/lib/utils";
+import React, { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 const PrintComponent = () => {
@@ -103,17 +106,45 @@ const PrintComponent = () => {
       console.log("Print completed");
     },
   });
-
+  const [active, setactive] = useState("DoubleShift");
+  const navbar = [
+    { id: "DoubleShift", name: "Double Shift", component: <DoubleShift /> },
+    { id: "TripleShift", name: "Triple Shift", component: <TripleShift /> },
+  ];
   return (
-    <div>
+    <div className="flex w-fit gap-6 items-center m-2 p-10 overflow-auto md:m-6 h-fit flex-col">
       {/* Print button */}
-      <button
+      {/* <button
         onClick={handlePrint}
         className="no-print mb-4  px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
         Print Document
-      </button>
-
+      </button> */}
+      <div className="flex gap-4">
+        {navbar.map((item, index) => (
+          <button
+            key={index}
+            className={cn(
+              "relative px-4 py-2 rounded-full transition-all duration-300 ease-in-out",
+              active === item.id
+                ? "bg-blue-500 text-white"
+                : "bg-gray-300 bg-clip-padding backdrop-filter backdrop-blur-2xl text-black"
+            )}
+            onClick={() => {
+              setactive(item.id);
+            }}
+          >
+            {item.name}
+            <span
+              className={cn(
+                "absolute bottom-1 left-1/2 h-0.5 bg-current transform -translate-x-1/2 transition-all duration-300 ease-in-out",
+                active === item.id ? "w-[70%]" : "w-0"
+              )}
+              style={{ bottom: "4px" }} // Adjust this to position the underline properly
+            />
+          </button>
+        ))}
+      </div>
       {/* Content to be printed */}
       <div ref={contentRef} className="print-content">
         {/* Rotated content - landscape orientation */}
