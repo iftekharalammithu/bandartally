@@ -288,7 +288,7 @@ export default function TripleShiftTable() {
                       }
                       onFocus={() => handleFocus(rowKey, hatch)}
                       onBlur={() => handleBlur(rowKey, hatch)}
-                      className="w-full"
+                      className="w-full appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
                   ) : (
                     formatNumber(

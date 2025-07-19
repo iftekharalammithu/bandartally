@@ -32,15 +32,6 @@ type RowConfig = {
   values?: HatchData;
 };
 
-// Utility functions
-const calculateTotalBags = (hatchData: HatchData): number =>
-  hatchData.h1 + hatchData.h2 + hatchData.h3 + hatchData.h4;
-
-const calculateTotalMTs = (bags: number): number => (bags * 50) / 1000;
-
-const formatNumber = (num: number): string =>
-  Number(num).toLocaleString("en-IN");
-
 export default function Tally_Table() {
   const [data, setData] = useState<TallyData>({
     manifest: { h1: 0, h2: 0, h3: 0, h4: 0 },
@@ -53,6 +44,10 @@ export default function Tally_Table() {
 
   // Memoize calculations
   const { last24hrs, totalDischarged, balance } = useMemo(() => {
+    // Utility functions
+    const calculateTotalBags = (hatchData: HatchData): number =>
+      hatchData.h1 + hatchData.h2 + hatchData.h3 + hatchData.h4;
+
     const last24hrsBags =
       calculateTotalBags(data.shiftDay) + calculateTotalBags(data.shiftNight);
     const totalDischargedBags =
@@ -97,6 +92,15 @@ export default function Tally_Table() {
       },
     };
   }, [data]);
+
+  const calculateTotalMTs = useCallback(
+    (bags: number): number => (bags * 50) / 1000,
+    []
+  );
+  const formatNumber = useCallback(
+    (num: number) => Number(num).toLocaleString("en-IN"),
+    []
+  );
 
   // Optimized handler for input changes
   const handleInputChange = useCallback(
@@ -257,7 +261,7 @@ export default function Tally_Table() {
                         }
                         onFocus={() => handleFocus(rowKey, hatch)}
                         onBlur={() => handleBlur(rowKey, hatch)}
-                        className="w-full"
+                        className="w-full appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       />
                     ) : (
                       formatNumber(
@@ -276,7 +280,10 @@ export default function Tally_Table() {
                   <TableCell className="border-r border-gray-400">
                     {formatNumber(
                       rowKey
-                        ? calculateTotalBags(data[rowKey])
+                        ? data[rowKey].h1 +
+                            data[rowKey].h2 +
+                            data[rowKey].h3 +
+                            data[rowKey].h4
                         : label === "Last 24hrs Discharges"
                         ? last24hrs
                         : label === "Total discharged Till date"
@@ -288,7 +295,10 @@ export default function Tally_Table() {
                     {formatNumber(
                       calculateTotalMTs(
                         rowKey
-                          ? calculateTotalBags(data[rowKey])
+                          ? data[rowKey].h1 +
+                              data[rowKey].h2 +
+                              data[rowKey].h3 +
+                              data[rowKey].h4
                           : label === "Last 24hrs Discharges"
                           ? last24hrs
                           : label === "Total discharged Till date"
