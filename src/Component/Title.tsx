@@ -1,49 +1,81 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CiEdit } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toTitleCase } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 const Title = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   // Title
-  const [title, settitle] = useState("ABC SHIPPING LINES LTD");
-  const [isopenTitle, setisopenTitle] = useState(false);
-  const [inputValueTitle, setInputValueTitle] = useState(title);
+  const [title, setTitle] = useState("");
+  const [isOpenTitle, setIsOpenTitle] = useState(false);
+  const [inputValueTitle, setInputValueTitle] = useState("");
 
   // Address
-  const [address, setaddress] = useState(
-    "185/188 Hakim mini super market 4th Floor, Stand Road Fakirhat Bandar,Chittagong"
-  );
-  const [isopenAddress, setisopenAddress] = useState(false);
-  const [inputValueAddress, setInputValueAddress] = useState(address);
+  const [address, setAddress] = useState("");
+  const [isOpenAddress, setIsOpenAddress] = useState(false);
+  const [inputValueAddress, setInputValueAddress] = useState("");
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const storedTitle =
+      localStorage.getItem("shippingCompanyName") || "ABC SHIPPING LINES LTD";
+    const storedAddress =
+      localStorage.getItem("companyAddress") ||
+      "185/188 Hakim mini super market 4th Floor, Stand Road Fakirhat Bandar, Chittagong";
+
+    setTitle(storedTitle);
+    setAddress(storedAddress);
+    setInputValueTitle(storedTitle);
+    setInputValueAddress(storedAddress);
+    setIsLoading(false);
+  }, []);
 
   const handleTitleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    settitle(inputValueTitle.toUpperCase());
-    setisopenTitle(false);
+    const newTitle = inputValueTitle.trim().toUpperCase();
+    setTitle(newTitle);
+    localStorage.setItem("shippingCompanyName", newTitle);
+    setIsOpenTitle(false);
   };
 
   const handleAddressSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    setaddress(toTitleCase(inputValueAddress));
-    setisopenAddress(false);
+    const newAddress = toTitleCase(inputValueAddress.trim());
+    setAddress(newAddress);
+    localStorage.setItem("companyAddress", newAddress);
+    setIsOpenAddress(false);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <p className="text-gray-500 flex gap-2 animate-pulse">
+          <Loader2 className=" animate-spin"></Loader2>
+          Loading company info...
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="text-center  items-center flex flex-col">
+    <div className="text-center items-center flex flex-col">
       <style>
         {`
-        @media print {
-          .print-hide {
-            display: none !important;
+          @media print {
+            .print-hide {
+              display: none !important;
+            }
           }
-        }
-      `}
+        `}
       </style>
-      <div className="w-11/12 ">
-        {isopenTitle ? (
+
+      {/* SHIPPING COMPANY NAME */}
+      <div className="w-11/12">
+        {isOpenTitle ? (
           <form
             onSubmit={handleTitleSubmit}
             className="justify-center items-center flex flex-col gap-2"
@@ -61,19 +93,21 @@ const Title = () => {
           </form>
         ) : (
           <div className="flex justify-center gap-2">
-            <h1 className=" text-2xl font-semibold">{title}</h1>
+            <h1 className="text-2xl font-semibold">{title}</h1>
             <CiEdit
-              className="print-hide"
+              className="print-hide cursor-pointer"
               onClick={() => {
-                setisopenTitle(true);
+                setIsOpenTitle(true);
                 setInputValueTitle(title);
               }}
             />
           </div>
         )}
       </div>
+
+      {/* COMPANY ADDRESS */}
       <div className="w-fit mt-2">
-        {isopenAddress ? (
+        {isOpenAddress ? (
           <form
             onSubmit={handleAddressSubmit}
             className="justify-center min-w-2xl items-center flex flex-col gap-2"
@@ -81,7 +115,7 @@ const Title = () => {
             <Input
               type="text"
               placeholder="COMPANY ADDRESS"
-              className="mx-1 "
+              className="mx-1"
               value={inputValueAddress}
               onChange={(e) => setInputValueAddress(e.target.value)}
             />
@@ -90,19 +124,20 @@ const Title = () => {
             </Button>
           </form>
         ) : (
-          <div className="flex   justify-center gap-2  ">
-            <p className="">Address:- {address}</p>
+          <div className="flex justify-center gap-2">
+            <p>Address: {address}</p>
             <CiEdit
-              className="w-4 h-4 print-hide"
+              className="w-4 h-4 print-hide cursor-pointer"
               onClick={() => {
-                setisopenAddress(true);
+                setIsOpenAddress(true);
                 setInputValueAddress(address);
               }}
             />
           </div>
         )}
       </div>
-      <h2 className=" font-bold underline underline-offset-4 mt-2">
+
+      <h2 className="font-bold underline underline-offset-4 mt-2">
         DAILY DISCHARGING REPORT
       </h2>
     </div>
